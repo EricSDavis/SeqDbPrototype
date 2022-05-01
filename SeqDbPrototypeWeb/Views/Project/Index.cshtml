@@ -1,0 +1,72 @@
+﻿@using SeqDbPrototypeWeb.ViewModels
+@*@model IEnumerable<Project>//IEnumerable<ProjectViewModel>*@
+@*@model IEnumerable<Project>*@
+@model IEnumerable<ProjectViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+
+    @if(Model.Count() < 1)
+    {
+        <div class="text-center">
+            <br />
+            <h1 class="display-4">No projects yet...</h1>
+            <a asp-controller="Project" asp-action="Create">
+                Create a new project
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-6">
+                <h1 class="display-5">Projects</h1>
+            </div>
+            <div class="col-6 text-end align-self-center">
+                <a asp-controller="Project" asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-journals"></i> &nbsp; New Project
+                </a>
+            </div>
+        </div>
+    }
+
+    @foreach (var obj in Model)
+    {
+        <div class="container mt-4 mb-4 pb-2 card">
+            <div class="row pt-4">
+                <div class="col-6">
+                    <h2>@obj.Abbreviation</h2>
+                </div>
+                <div class="col-6 text-end align-self-center">
+                    <a asp-controller="Project" asp-action="Edit" asp-route-id="@obj.Id"><i class="bi bi-pencil-fill"></i></a> &nbsp;
+                    @*<a asp-controller="Home" asp-action="Index"><i class="bi bi-info-circle-fill"></i></a> &nbsp;*@
+                    <a asp-controller="Project" asp-action="Delete" asp-route-id="@obj.Id"><i class="bi bi-trash3-fill"></i></a> &nbsp;
+                </div>
+            </div>
+            <div class="row pt-2">
+                <h5>@obj.Name</h5>
+            </div>
+            <div class="row pt-2">
+                <p>
+                    @(!string.IsNullOrEmpty(obj.Description) ? @Html.Raw(obj.Description.Replace(Environment.NewLine, "<br/>")) : obj.Description)
+                </p>
+            </div>
+            <div class="row pt-2">
+                <div class="col-12">
+                    <small>
+                        <a asp-controller="Experiment" asp-action="Index" asp-route-ProjectId="@obj.Id">
+                            @obj.ExperimentCount Experiments
+                        </a> &middot; 0 Samples
+                    </small>
+                </div>
+            </div>
+            <div class="row pt-2">
+                <div class="col-12">
+                    <a asp-controller="Experiment" asp-action="Create" asp-route-ProjectId="@obj.Id" class="btn btn-outline-primary">Add Experiment</a>
+                </div>            
+            </div>
+        </div>
+    }
+</div>
